@@ -9,6 +9,8 @@ router.get('/join', authanticateMiddleware.authenticateUser,messageTabController
 
 router.post('/message', authanticateMiddleware.authenticateUser,messageTabController.postMessage)
 
+router.get('/recieve', authanticateMiddleware.authenticateUser,messageTabController.getMessage)
+
 
 
 module.exports = router;

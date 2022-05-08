@@ -1,6 +1,6 @@
 const { response } = require('express');
 const User = require('../models/user');
-const Message = require('../models/user');
+const Message = require('../models/message');
 
 exports.getUser = (req,response,next)=>{
     const loggedInUser = req.user.name;
@@ -28,4 +28,13 @@ exports.postMessage = (req,res,next)=>{
     .catch(err=>{
         return res.status(403).json({err,success:false})
     })
+}
+
+exports.getMessage = async (req,res,next)=>{
+    try {
+        const messages = await Message.findAll()
+        res.status(200).json({messages})
+    } catch (error) {
+        res.status(401).json({messages})
+    }    
 }
