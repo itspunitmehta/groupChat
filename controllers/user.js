@@ -35,19 +35,22 @@ exports.userLogin = (req,res,next)=>{
             bcrypt.compare(password, users[0].password, function(err,response){
                 if(err){
                     console.log(err)
-                    return res.json({message:"Wrong password! Please enter correct password..",success:false})
+                    return res.json({message:"Something went wrong!!",success:false})
                 }
                 if(response){
                     const jwtToken = generateToken(users[0].id)
                     return res.json({token:jwtToken,success:true,message:'Logged in Successfully'})
                 }else{
-                    return res.status(401).json({message:"Something went wrong!"})
+                    return res.status(401).json({message:"Wrong password! Please enter correct password...!"})
                 }
             })
         }
+        else{
+            return res.status(404).json({message:"User not found! Please signup",success:false,err});
+        }
     })
     .catch(err=>{
-        res.status(404).json({message:"User not found! Please signup",success:false});
+        res.status(400).json({message:"Something went wrong!!",success:false,err});
     })
 }
 
