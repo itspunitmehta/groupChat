@@ -30,6 +30,7 @@ User.hasMany(Message);
 Message.belongsTo(User);
 
 sequelize
+    // .sync({force:true})
     .sync()
     .then(()=>{
     app.listen(4000);

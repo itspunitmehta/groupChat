@@ -35,7 +35,7 @@ exports.userLogin = (req,res,next)=>{
             bcrypt.compare(password, users[0].password, function(err,response){
                 if(err){
                     console.log(err)
-                    return res.json({message:"Something went wrong!!",success:false})
+                    return res.status(400).json({message:"Something went wrong!!",success:false})
                 }
                 if(response){
                     const jwtToken = generateToken(users[0].id)
@@ -50,7 +50,7 @@ exports.userLogin = (req,res,next)=>{
         }
     })
     .catch(err=>{
-        res.status(400).json({message:"Something went wrong!!",success:false,err});
+        res.status(400).json({message:"User not found! Please signup",success:false,err});
     })
 }
 

@@ -1,6 +1,8 @@
-const { response } = require('express');
+
 const User = require('../models/user');
 const Message = require('../models/message');
+const {Op} = require('sequelize')
+
 
 exports.getUser = (req,response,next)=>{
     const loggedInUser = req.user.name;
@@ -19,11 +21,12 @@ exports.getUser = (req,response,next)=>{
 }
 
 exports.postMessage = (req,res,next)=>{
-    const user = req.user.name;
+    const senderName =  req.user.name
     const {message} = req.body;
-    req.user.createMessage({message})
+    console.log(message,senderName);
+    req.user.createMessage({senderName,message})
     .then(msg=>{
-        return res.status(201).json({msg,user,success:true})
+        return res.status(201).json({msg,success:true})
     })
     .catch(err=>{
         return res.status(403).json({err,success:false})
@@ -32,7 +35,8 @@ exports.postMessage = (req,res,next)=>{
 
 exports.getMessage = async (req,res,next)=>{
     try {
-        const messages = await Message.findAll()
+        const mid = req.query.id;
+        const messages = await Message.findAll({where:{id:{[Op.gte]:mid}}})
         res.status(200).json({messages})
     } catch (error) {
         res.status(401).json({messages})
