@@ -5,7 +5,7 @@ const {Op} = require('sequelize')
 
 
 exports.getUser = (req,response,next)=>{
-    const loggedInUser = req.user.name;
+    // const loggedInUser = req.user.name;
     let allUser = [];
     // console.log(loggedInUser);
     User.findAll()
@@ -13,7 +13,7 @@ exports.getUser = (req,response,next)=>{
         users.forEach(user => {
             allUser.push(user.name)
         })
-        return response.status(200).json({name:loggedInUser,listOfUser:allUser});
+        return response.status(200).json({listOfUser:allUser});
     })
     .catch(err=>{
         return response.status(402).json({message:"Wrong path", success:false})
@@ -36,9 +36,9 @@ exports.postMessage = (req,res,next)=>{
 exports.getMessage = async (req,res,next)=>{
     try {
         const mid = req.query.id;
-        const messages = await Message.findAll({where:{id:{[Op.gte]:mid}}})
+        const messages = await Message.findAll({where:{id:{[Op.gte]:mid},groupId:null}})
         res.status(200).json({messages})
     } catch (error) {
-        res.status(401).json({messages})
+        res.status(401).json({error})
     }    
 }
