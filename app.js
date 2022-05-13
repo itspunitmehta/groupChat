@@ -1,3 +1,4 @@
+const path = require('path');
 
 const express = require('express');
 const cors = require('cors');
@@ -20,14 +21,15 @@ const GroupTable = require('./models/grouptable');
 const userRoutes = require('./routes/user');
 const chatRoutes = require('./routes/messagetab');
 const groupRoutes = require('./routes/group');
+// app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/user', userRoutes);
 app.use('/chat', chatRoutes);
 app.use('/group', groupRoutes);
 
 app.use((req,res)=>{
-    console.log('hello in app.js');
-    res.status(404).send('<h1>Page Not Found </h1>');
+    console.log(req.url);
+    res.sendFile(path.join(__dirname, `public/${req.url}`));
 })
 
 User.hasMany(Message);
